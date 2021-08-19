@@ -1,0 +1,18 @@
+{
+    "name": "juanfeltrin/vtex-sdk-php",
+    "description": "VTEX SDK for PHP",
+    "keywords": ["vtex","sdk"],
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Vtex\\": "src/"
+        },
+        "files": [
+            "src/helper.php"
+        ]
+    },
+    "require": {
+        "guzzlehttp/guzzle": "^7.0",
+      "ext-json": "*"
+    }
+}
