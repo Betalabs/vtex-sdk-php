@@ -31,7 +31,17 @@ class VtexClient
     public function __construct(array $config = [])
     {
         $this->api = api($this->parseClass());
-        $this->credentials = $config['credentials'];
+
+        if (isset($config['credentials'])) {
+            $this->credentials = $config['credentials'];
+        } else {
+            $this->credentials = [
+                'accountName' => getenv('VTEX_ACCOUNT_NAME'),
+                'environment' => getenv('VTEX_ENVIRONMENT'),
+                'appKey' => getenv('VTEX_APP_KEY'),
+                'appToken' => getenv('VTEX_APP_TOKEN')
+            ];
+        }
     }
 
     /**
@@ -46,94 +56,97 @@ class VtexClient
      * @param string $name
      * @param array $args
      * @return array
+     * @throws VtexException
      */
     public function __call(string $name, array $args): array
     {
-        $apiPaths = $this->api['paths'];
-        $uri = $this->api['servers'][0]['url'];
-        $headers = [];
-        $pathArgs = ($args[0] ?? []) + $this->credentials;
-        $queryArgs = $args[1] ?? [];
-        $queryParams = [];
-        $existOperation = false;
-        $methodOperation = 'get';
+        try {
+            $apiPaths = $this->api['paths'];
+            $securitySchemas = $this->api['components']['securitySchemes'] ?? [];
+            $uri = $this->api['servers'][0]['url'];
+            $headers = [];
+            $pathArgs = ($args[0] ?? []) + $this->credentials;
+            $queryArgs = $args[1] ?? [];
+            $queryParams = [];
+            $existOperation = false;
+            $methodOperation = 'get';
 
-        foreach ($apiPaths as $apiPath => $methods) {
-            foreach ($methods as $method => $operation) {
-                if (
-                    isset($operation['operationId']) &&
-                    ucfirst($name) === $operation['operationId']
-                ) {
-                    $uri = $uri . $apiPath;
-                    $methodOperation = $method;
+            foreach ($apiPaths as $apiPath => $methods) {
+                foreach ($methods as $method => $operation) {
+                    if (
+                        isset($operation['operationId']) &&
+                        ucfirst($name) === $operation['operationId']
+                    ) {
+                        $uri = $uri . $apiPath;
+                        $methodOperation = $method;
 
-                    foreach ($operation['parameters'] as $parameter) {
-                        switch ($parameter['in']) {
-                            case 'path':
-                                if ($parameter['required']) {
-                                    if (isset($pathArgs[$parameter['name']])) {
+                        foreach ($operation['parameters'] as $parameter) {
+                            switch ($parameter['in']) {
+                                case 'path':
+                                    if ($parameter['required']) {
+                                        if (isset($pathArgs[$parameter['name']])) {
+                                            $uri = str_replace(
+                                                '{' . $parameter['name'] . '}',
+                                                $pathArgs[$parameter['name']],
+                                                $uri
+                                            );
+                                        } else {
+                                            throw new VtexException(
+                                                "missing parameter {$parameter['name']} path"
+                                            );
+                                        }
+                                    } elseif (isset($pathArgs[$parameter['name']])) {
                                         $uri = str_replace(
                                             '{' . $parameter['name'] . '}',
                                             $pathArgs[$parameter['name']],
                                             $uri
                                         );
-                                    } else {
-                                        throw new VtexException(
-                                            "missing parameter {$parameter['name']} path"
-                                        );
                                     }
-                                } elseif (isset($pathArgs[$parameter['name']])) {
-                                    $uri = str_replace(
-                                        '{' . $parameter['name'] . '}',
-                                        $pathArgs[$parameter['name']],
-                                        $uri
-                                    );
-                                }
 
-                                break;
-                            case 'query':
-                                if ($parameter['required']) {
-                                    if (isset($queryArgs[$parameter['name']])) {
-                                        $queryParams[$parameter['name']] = $queryArgs[$parameter['name']];
-                                    } else {
-                                        throw new VtexException(
-                                            "missing parameter {$parameter['name']} query"
-                                        );
+                                    break;
+                                case 'query':
+                                    if ($parameter['required']) {
+                                        if (isset($queryArgs[$parameter['name']])) {
+                                            $queryParams[$parameter['name']] = $queryArgs[$parameter['name']];
+                                        } else {
+                                            throw new VtexException(
+                                                "missing parameter {$parameter['name']} query"
+                                            );
+                                        }
+                                    } elseif (isset($queryArgs[$parameter['name']])) {
+                                        $queryParams[$parameter['name']] = $queryArgs[
+                                        $parameter['name']
+                                        ];
                                     }
-                                } elseif (isset($queryArgs[$parameter['name']])) {
-                                    $queryParams[$parameter['name']] = $queryArgs[
-                                    $parameter['name']
-                                    ];
-                                }
 
-                                break;
-                            case 'header':
-                                $headers[$parameter['name']] = $headerParams[
-                                    $parameter['name']
-                                    ] ??
-                                    $parameter['schema']['default'] ??
-                                    $parameter['schema']['example'];
+                                    break;
+                                case 'header':
+                                    $headers[$parameter['name']] = $parameter['schema']['default'] ??
+                                        $parameter['schema']['example'];
 
-                                break;
+                                    break;
+                            }
                         }
+
+                        $existOperation = true;
+
+                        break 2;
                     }
-
-                    $existOperation = true;
-
-                    break 2;
                 }
             }
-        }
 
-        if (!$existOperation) {
-            throw new VtexException(
-                "operation {$name} not found"
-            );
-        }
+            if (!$existOperation) {
+                throw new VtexException(
+                    "operation {$name} not found"
+                );
+            }
 
-        $client = new Client();
+            foreach ($securitySchemas as $key => $securitySchema) {
+                $headers[$securitySchema['name']] = $this->credentials[$key];
+            }
 
-        try {
+            $client = new Client();
+
             $this->response = $client->request(
                 $methodOperation,
                 $uri,
@@ -151,6 +164,10 @@ class VtexClient
         } catch (GuzzleException $guzzleException) {
             throw new VtexException(
                 $guzzleException->getMessage()
+            );
+        } catch (\Exception $exception) {
+            throw new VtexException(
+                $exception->getMessage()
             );
         }
     }
