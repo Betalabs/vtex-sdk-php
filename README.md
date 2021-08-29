@@ -1,6 +1,11 @@
 # Still in development!
 
-### Create an Catalog client and get product by id
+### Create an Catalog client
+
+#### Argument Options
+* pathParams
+* queryParams
+* body
 
 ```php
 <?php
@@ -16,7 +21,11 @@ $catalogClient = new \Vtex\Catalog\CatalogClient([
 ]);
 
 try {
-    $catalogClient->getProductbyid(['productId' => 6]);
+    $catalogClient->getAttachment([
+        'pathParams' => [
+            'attachmentid' => 1
+        ]
+    ]);
 } catch (\Vtex\Exception\VtexException $vtexException) {
     echo $vtexException->getMessage();
 }

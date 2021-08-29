@@ -54,19 +54,19 @@ class VtexClient
 
     /**
      * @param string $name
-     * @param array $args
+     * @param array $args = []
      * @return array
      * @throws VtexException
      */
-    public function __call(string $name, array $args): array
+    public function __call(string $name, array $args = []): array
     {
         try {
             $apiPaths = $this->api['paths'];
             $securitySchemas = $this->api['components']['securitySchemes'] ?? [];
             $uri = $this->api['servers'][0]['url'];
             $headers = [];
-            $pathArgs = ($args[0] ?? []) + $this->credentials;
-            $queryArgs = $args[1] ?? [];
+            $pathArgs = ($args[0]['pathParams'] ?? []) + $this->credentials;
+            $queryArgs = $args[0]['queryParams'] ?? [];
             $queryParams = [];
             $existOperation = false;
             $methodOperation = 'get';
@@ -152,7 +152,8 @@ class VtexClient
                 $uri,
                 [
                     'headers' => $headers,
-                    'query' => $queryParams
+                    'query' => $queryParams,
+                    'json' => $args[0]['body'] ?? []
                 ]
             );
 

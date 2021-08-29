@@ -1,13 +1,14 @@
 {
   "servers":[
     {
-      "url":"https://api.vtex.com/{accountName}/pricing",
+      "url":"https://{accountName}.{environment}.com.br/api/",
       "description":"VTEX server url"
     }
   ],
   "paths":{
-    "/pipeline/catalog/":{
+    "/giftcards":{
       "post":{
+        "operationId":"CreateGiftCard",
         "parameters":[
           {
             "name":"accountName",
@@ -28,16 +29,6 @@
             }
           },
           {
-            "name":"Accept",
-            "in":"header",
-            "required":true,
-            "style":"simple",
-            "schema":{
-              "type":"string",
-              "example":"application/vnd.vtex.pricing.v3+json"
-            }
-          },
-          {
             "name":"Content-Type",
             "in":"header",
             "required":true,
@@ -46,14 +37,44 @@
               "type":"string",
               "default":"application/json"
             }
+          },
+          {
+            "name":"Accept",
+            "in":"header",
+            "required":true,
+            "style":"simple",
+            "schema":{
+              "type":"string",
+              "default":"application/json"
+            }
+          },
+          {
+            "name":"X-VTEX-API-AppKey",
+            "in":"header",
+            "required":true,
+            "style":"simple",
+            "schema":{
+              "type":"string",
+              "default":"{{X-VTEX-API-AppKey}}"
+            }
+          },
+          {
+            "name":"X-VTEX-API-AppToken",
+            "in":"header",
+            "required":true,
+            "style":"simple",
+            "schema":{
+              "type":"string",
+              "default":"{{X-VTEX-API-AppToken}}"
+            }
           }
         ],
-        "operationId":"CreateRulesForAPriceTable"
+        "deprecated":false
       }
     },
-    "/prices/{itemId}":{
+    "/giftcards/{giftCardID}":{
       "get":{
-        "operationId":"GetPrice",
+        "operationId":"GetGiftCardById",
         "parameters":[
           {
             "name":"accountName",
@@ -74,6 +95,16 @@
             }
           },
           {
+            "name":"Accept",
+            "in":"header",
+            "required":true,
+            "style":"simple",
+            "schema":{
+              "type":"string",
+              "default":"application/json"
+            }
+          },
+          {
             "name":"Content-Type",
             "in":"header",
             "required":true,
@@ -84,222 +115,22 @@
             }
           },
           {
-            "name":"Accept",
-            "in":"header",
-            "required":true,
-            "style":"simple",
-            "schema":{
-              "type":"string",
-              "example":"application/vnd.vtex.pricing.v3+json"
-            }
-          },
-          {
-            "name":"itemId",
+            "name":"giftCardID",
             "in":"path",
             "required":true,
             "style":"simple",
             "schema":{
-              "type":"string"
+              "type":"string",
+              "default":"2"
             }
           }
         ],
-        "deprecated":false,
-        "servers":[
-          {
-            "url":"https://api.vtex.com/{account}/pricing",
-            "variables":{
-              "account":{
-                "default":"DefaultParameterValue"
-              }
-            }
-          }
-        ]
-      },
-      "delete":{
-        "operationId":"DeletePrice",
-        "parameters":[
-          {
-            "name":"accountName",
-            "in":"path",
-            "required":true,
-            "schema":{
-              "type":"string",
-              "default":"apiexamples"
-            }
-          },
-          {
-            "name":"environment",
-            "in":"path",
-            "required":true,
-            "schema":{
-              "type":"string",
-              "default":"vtexcommercestable"
-            }
-          },
-          {
-            "name":"Content-Type",
-            "in":"header",
-            "required":true,
-            "style":"simple",
-            "schema":{
-              "type":"string",
-              "default":"application/json"
-            }
-          },
-          {
-            "name":"Accept",
-            "in":"header",
-            "required":true,
-            "style":"simple",
-            "schema":{
-              "type":"string",
-              "default":"application/json"
-            }
-          },
-          {
-            "name":"itemId",
-            "in":"path",
-            "required":true,
-            "style":"simple",
-            "schema":{
-              "type":"string"
-            }
-          }
-        ],
-        "deprecated":false,
-        "servers":[
-          {
-            "url":"https://api.vtex.com/{account}/pricing",
-            "variables":{
-              "account":{
-                "default":"DefaultParameterValue"
-              }
-            }
-          }
-        ]
-      },
-      "put":{
-        "operationId":"CreateOrUpdateBaseOrFixedPrices",
-        "parameters":[
-          {
-            "name":"accountName",
-            "in":"path",
-            "required":true,
-            "schema":{
-              "type":"string",
-              "default":"apiexamples"
-            }
-          },
-          {
-            "name":"environment",
-            "in":"path",
-            "required":true,
-            "schema":{
-              "type":"string",
-              "default":"vtexcommercestable"
-            }
-          },
-          {
-            "name":"Accept",
-            "in":"header",
-            "required":true,
-            "style":"simple",
-            "schema":{
-              "type":"string",
-              "example":"application/vnd.vtex.pricing.v3+json"
-            }
-          },
-          {
-            "name":"Content-Type",
-            "in":"header",
-            "required":true,
-            "style":"simple",
-            "schema":{
-              "type":"string",
-              "default":"application/json"
-            }
-          },
-          {
-            "name":"itemId",
-            "in":"path",
-            "required":true,
-            "style":"simple",
-            "schema":{
-              "type":"integer",
-              "default":1
-            }
-          }
-        ]
+        "deprecated":false
       }
     },
-    "/prices/{itemId}/fixed":{
-      "get":{
-        "operationId":"GetFixedPrices",
-        "parameters":[
-          {
-            "name":"accountName",
-            "in":"path",
-            "required":true,
-            "schema":{
-              "type":"string",
-              "default":"apiexamples"
-            }
-          },
-          {
-            "name":"environment",
-            "in":"path",
-            "required":true,
-            "schema":{
-              "type":"string",
-              "default":"vtexcommercestable"
-            }
-          },
-          {
-            "name":"Accept",
-            "in":"header",
-            "required":true,
-            "style":"simple",
-            "schema":{
-              "type":"string",
-              "example":"application/vnd.vtex.pricing.v3+json"
-            }
-          },
-          {
-            "name":"Content-Type",
-            "in":"header",
-            "required":true,
-            "style":"simple",
-            "schema":{
-              "type":"string",
-              "default":"application/json"
-            }
-          },
-          {
-            "name":"itemId",
-            "in":"path",
-            "required":true,
-            "style":"simple",
-            "schema":{
-              "type":"string"
-            }
-          }
-        ],
-        "deprecated":false,
-        "servers":[
-          {
-            "url":"https://api.vtex.com/{account}/pricing",
-            "variables":{
-              "account":{
-                "default":"DefaultParameterValue"
-              }
-            }
-          }
-        ]
-      }
-    },
-    "/prices/{itemId}/fixed/{priceTableId}":{
+    "/giftcards/_search":{
       "post":{
-        "operationId":"CreateOrUpdateFixedPricesOnAPriceTableOrTradePolicy",
+        "operationId":"GetGiftCardUsingJSON",
         "parameters":[
           {
             "name":"accountName",
@@ -320,6 +151,16 @@
             }
           },
           {
+            "name":"Accept",
+            "in":"header",
+            "required":true,
+            "style":"simple",
+            "schema":{
+              "type":"string",
+              "default":"application/json"
+            }
+          },
+          {
             "name":"Content-Type",
             "in":"header",
             "required":true,
@@ -327,6 +168,42 @@
             "schema":{
               "type":"string",
               "default":"application/json"
+            }
+          },
+          {
+            "name":"REST-Range",
+            "in":"header",
+            "required":false,
+            "style":"simple",
+            "schema":{
+              "type":"string",
+              "default":"giftcard=0-49"
+            }
+          }
+        ],
+        "deprecated":false
+      }
+    },
+    "/giftcards/{giftCardID}/transactions":{
+      "get":{
+        "operationId":"GetGiftCardTransactions",
+        "parameters":[
+          {
+            "name":"accountName",
+            "in":"path",
+            "required":true,
+            "schema":{
+              "type":"string",
+              "default":"apiexamples"
+            }
+          },
+          {
+            "name":"environment",
+            "in":"path",
+            "required":true,
+            "schema":{
+              "type":"string",
+              "default":"vtexcommercestable"
             }
           },
           {
@@ -340,39 +217,30 @@
             }
           },
           {
-            "name":"itemId",
-            "in":"path",
+            "name":"Content-Type",
+            "in":"header",
             "required":true,
             "style":"simple",
             "schema":{
-              "type":"string"
+              "type":"string",
+              "default":"application/json"
             }
           },
           {
-            "name":"priceTableId",
+            "name":"giftCardID",
             "in":"path",
             "required":true,
             "style":"simple",
             "schema":{
               "type":"string",
-              "default":"priceTableA"
+              "default":"2"
             }
           }
         ],
-        "deprecated":false,
-        "servers":[
-          {
-            "url":"https://api.vtex.com/{account}/pricing",
-            "variables":{
-              "account":{
-                "default":"DefaultParameterValue"
-              }
-            }
-          }
-        ]
+        "deprecated":false
       },
-      "get":{
-        "operationId":"GetFixedPricesOnAPriceTable",
+      "post":{
+        "operationId":"CreateGiftCardTransaction",
         "parameters":[
           {
             "name":"accountName",
@@ -393,6 +261,16 @@
             }
           },
           {
+            "name":"Accept",
+            "in":"header",
+            "required":true,
+            "style":"simple",
+            "schema":{
+              "type":"string",
+              "default":"application/json"
+            }
+          },
+          {
             "name":"Content-Type",
             "in":"header",
             "required":true,
@@ -403,48 +281,218 @@
             }
           },
           {
+            "name":"giftCardID",
+            "in":"path",
+            "required":true,
+            "style":"simple",
+            "schema":{
+              "type":"string",
+              "default":"7"
+            }
+          }
+        ],
+        "deprecated":false
+      }
+    },
+    "/giftcards/{giftCardID}/transactions/{transactionID}":{
+      "get":{
+        "operationId":"GetGiftCardTransactionById",
+        "parameters":[
+          {
+            "name":"accountName",
+            "in":"path",
+            "required":true,
+            "schema":{
+              "type":"string",
+              "default":"apiexamples"
+            }
+          },
+          {
+            "name":"environment",
+            "in":"path",
+            "required":true,
+            "schema":{
+              "type":"string",
+              "default":"vtexcommercestable"
+            }
+          },
+          {
             "name":"Accept",
             "in":"header",
             "required":true,
             "style":"simple",
             "schema":{
               "type":"string",
-              "example":"application/vnd.vtex.pricing.v3+json"
+              "default":"application/json"
             }
           },
           {
-            "name":"itemId",
+            "name":"Content-Type",
+            "in":"header",
+            "required":true,
+            "style":"simple",
+            "schema":{
+              "type":"string",
+              "default":"application/json"
+            }
+          },
+          {
+            "name":"giftCardID",
             "in":"path",
             "required":true,
             "style":"simple",
             "schema":{
-              "type":"integer"
+              "type":"string",
+              "default":"6"
             }
           },
           {
-            "name":"priceTableId",
+            "name":"transactionID",
             "in":"path",
             "required":true,
             "style":"simple",
             "schema":{
-              "type":"string"
+              "type":"string",
+              "default":"b47690"
             }
           }
         ],
-        "deprecated":false,
-        "servers":[
+        "deprecated":false
+      }
+    },
+    "/giftcards/{giftCardID}/transactions/{transactionID}/authorization":{
+      "get":{
+        "operationId":"GetTransactionAuthorizations",
+        "parameters":[
           {
-            "url":"https://api.vtex.com/{account}/pricing",
-            "variables":{
-              "account":{
-                "default":"DefaultParameterValue"
-              }
+            "name":"accountName",
+            "in":"path",
+            "required":true,
+            "schema":{
+              "type":"string",
+              "default":"apiexamples"
+            }
+          },
+          {
+            "name":"environment",
+            "in":"path",
+            "required":true,
+            "schema":{
+              "type":"string",
+              "default":"vtexcommercestable"
+            }
+          },
+          {
+            "name":"Accept",
+            "in":"header",
+            "required":true,
+            "style":"simple",
+            "schema":{
+              "type":"string",
+              "default":"application/json"
+            }
+          },
+          {
+            "name":"Content-Type",
+            "in":"header",
+            "required":true,
+            "style":"simple",
+            "schema":{
+              "type":"string",
+              "default":"application/json"
+            }
+          },
+          {
+            "name":"giftCardID",
+            "in":"path",
+            "required":true,
+            "style":"simple",
+            "schema":{
+              "type":"string",
+              "default":"6"
+            }
+          },
+          {
+            "name":"transactionID",
+            "in":"path",
+            "required":true,
+            "style":"simple",
+            "schema":{
+              "type":"string",
+              "default":"b47690"
             }
           }
-        ]
+        ],
+        "deprecated":false
+      }
+    },
+    "/giftcards/{giftCardID}/transactions/{transactionID}/cancellations":{
+      "get":{
+        "operationId":"GetTransactionCancellations",
+        "parameters":[
+          {
+            "name":"accountName",
+            "in":"path",
+            "required":true,
+            "schema":{
+              "type":"string",
+              "default":"apiexamples"
+            }
+          },
+          {
+            "name":"environment",
+            "in":"path",
+            "required":true,
+            "schema":{
+              "type":"string",
+              "default":"vtexcommercestable"
+            }
+          },
+          {
+            "name":"Accept",
+            "in":"header",
+            "required":true,
+            "style":"simple",
+            "schema":{
+              "type":"string",
+              "default":"application/json"
+            }
+          },
+          {
+            "name":"Content-Type",
+            "in":"header",
+            "required":true,
+            "style":"simple",
+            "schema":{
+              "type":"string",
+              "default":"application/json"
+            }
+          },
+          {
+            "name":"giftCardID",
+            "in":"path",
+            "required":true,
+            "style":"simple",
+            "schema":{
+              "type":"string",
+              "default":"6"
+            }
+          },
+          {
+            "name":"transactionID",
+            "in":"path",
+            "required":true,
+            "style":"simple",
+            "schema":{
+              "type":"string",
+              "default":"b47690"
+            }
+          }
+        ],
+        "deprecated":false
       },
-      "delete":{
-        "operationId":"DeleteFixedPricesOnAPriceTableOrTradePolicy",
+      "post":{
+        "operationId":"CancelGiftCardTransaction",
         "parameters":[
           {
             "name":"accountName",
@@ -465,6 +513,16 @@
             }
           },
           {
+            "name":"Accept",
+            "in":"header",
+            "required":true,
+            "style":"simple",
+            "schema":{
+              "type":"string",
+              "default":"application/json"
+            }
+          },
+          {
             "name":"Content-Type",
             "in":"header",
             "required":true,
@@ -475,53 +533,32 @@
             }
           },
           {
-            "name":"Accept",
-            "in":"header",
+            "name":"giftCardID",
+            "in":"path",
             "required":true,
             "style":"simple",
             "schema":{
               "type":"string",
-              "example":"application/vnd.vtex.pricing.v3+json"
+              "default":"6"
             }
           },
           {
-            "name":"itemId",
+            "name":"transactionID",
             "in":"path",
             "required":true,
             "style":"simple",
             "schema":{
-              "type":"string"
-            }
-          },
-          {
-            "name":"priceTableId",
-            "in":"path",
-            "required":true,
-            "style":"simple",
-            "schema":{
-              "type":"string"
+              "type":"string",
+              "default":"b476900c"
             }
           }
         ],
-        "deprecated":false,
-        "servers":[
-          {
-            "url":"http://example.com/{account}/pricing/prices/{itemId}/fixed",
-            "variables":{
-              "account":{
-                "default":"DefaultParameterValue"
-              },
-              "itemId":{
-                "default":"DefaultParameterValue"
-              }
-            }
-          }
-        ]
+        "deprecated":false
       }
     },
-    "/prices/{itemId}/computed/{priceTableId}":{
+    "/giftcards/{giftCardID}/transactions/{transactionID}/settlements":{
       "get":{
-        "operationId":"GetComputedPriceByPriceTable",
+        "operationId":"GetTransactionSettlements",
         "parameters":[
           {
             "name":"accountName",
@@ -542,36 +579,13 @@
             }
           },
           {
-            "name":"categoryIds",
-            "in":"query",
+            "name":"Accept",
+            "in":"header",
             "required":true,
-            "style":"form",
-            "explode":true,
+            "style":"simple",
             "schema":{
-              "type":"integer",
-              "example":"[{{categoryId}}]"
-            }
-          },
-          {
-            "name":"brandId",
-            "in":"query",
-            "required":true,
-            "style":"form",
-            "explode":true,
-            "schema":{
-              "type":"integer",
-              "example":"{{brandId}}"
-            }
-          },
-          {
-            "name":"quantity",
-            "in":"query",
-            "required":true,
-            "style":"form",
-            "explode":true,
-            "schema":{
-              "type":"integer",
-              "example":"{{quantity}}"
+              "type":"string",
+              "default":"application/json"
             }
           },
           {
@@ -585,224 +599,30 @@
             }
           },
           {
-            "name":"Accept",
-            "in":"header",
+            "name":"giftCardID",
+            "in":"path",
             "required":true,
             "style":"simple",
             "schema":{
               "type":"string",
-              "example":"application/vnd.vtex.pricing.v3+json"
+              "default":"7"
             }
           },
           {
-            "name":"itemId",
+            "name":"transactionID",
             "in":"path",
             "required":true,
             "style":"simple",
             "schema":{
-              "type":"string"
-            }
-          },
-          {
-            "name":"priceTableId",
-            "in":"path",
-            "required":true,
-            "style":"simple",
-            "schema":{
-              "type":"string"
+              "type":"string",
+              "default":"b47690"
             }
           }
         ],
-        "deprecated":false,
-        "servers":[
-          {
-            "url":"https://api.vtex.com/{account}/pricing",
-            "variables":{
-              "account":{
-                "default":"DefaultParameterValue"
-              }
-            }
-          }
-        ]
-      }
-    },
-    "/config":{
-      "get":{
-        "operationId":"GetPricingConfig",
-        "parameters":[
-          {
-            "name":"accountName",
-            "in":"path",
-            "required":true,
-            "schema":{
-              "type":"string",
-              "default":"apiexamples"
-            }
-          },
-          {
-            "name":"environment",
-            "in":"path",
-            "required":true,
-            "schema":{
-              "type":"string",
-              "default":"vtexcommercestable"
-            }
-          },
-          {
-            "name":"Content-Type",
-            "in":"header",
-            "required":true,
-            "style":"simple",
-            "schema":{
-              "type":"string",
-              "default":"application/json"
-            }
-          },
-          {
-            "name":"Accept",
-            "in":"header",
-            "required":true,
-            "style":"simple",
-            "schema":{
-              "type":"string",
-              "example":"application/vnd.vtex.pricing.v3+json"
-            }
-          }
-        ],
-        "deprecated":false,
-        "servers":[
-          {
-            "url":"https://api.vtex.com/{account}/pricing",
-            "variables":{
-              "account":{
-                "default":"DefaultParameterValue"
-              }
-            }
-          }
-        ]
-      }
-    },
-    "/migration":{
-      "get":{
-        "operationId":"GetsPricingVActiveStatus",
-        "parameters":[
-          {
-            "name":"accountName",
-            "in":"path",
-            "required":true,
-            "schema":{
-              "type":"string",
-              "default":"apiexamples"
-            }
-          },
-          {
-            "name":"environment",
-            "in":"path",
-            "required":true,
-            "schema":{
-              "type":"string",
-              "default":"vtexcommercestable"
-            }
-          },
-          {
-            "name":"Content-Type",
-            "in":"header",
-            "required":true,
-            "style":"simple",
-            "schema":{
-              "type":"string",
-              "default":"application/json"
-            }
-          },
-          {
-            "name":"Accept",
-            "in":"header",
-            "required":true,
-            "style":"simple",
-            "schema":{
-              "type":"string",
-              "example":"application/vnd.vtex.pricing.v3+json"
-            }
-          }
-        ],
-        "deprecated":false,
-        "servers":[
-          {
-            "url":"https://api.vtex.com/{account}/pricing",
-            "variables":{
-              "account":{
-                "default":"DefaultParameterValue"
-              }
-            }
-          }
-        ]
-      }
-    },
-    "/pipeline/catalog/{priceTableId}":{
-      "get":{
-        "operationId":"GetRulesForAPriceTable",
-        "parameters":[
-          {
-            "name":"accountName",
-            "in":"path",
-            "required":true,
-            "schema":{
-              "type":"string",
-              "default":"apiexamples"
-            }
-          },
-          {
-            "name":"environment",
-            "in":"path",
-            "required":true,
-            "schema":{
-              "type":"string",
-              "default":"vtexcommercestable"
-            }
-          },
-          {
-            "name":"Content-Type",
-            "in":"header",
-            "required":true,
-            "style":"simple",
-            "schema":{
-              "type":"string",
-              "default":"application/json"
-            }
-          },
-          {
-            "name":"Accept",
-            "in":"header",
-            "required":true,
-            "style":"simple",
-            "schema":{
-              "type":"string",
-              "example":"application/vnd.vtex.pricing.v3+json"
-            }
-          },
-          {
-            "name":"priceTableId",
-            "in":"path",
-            "required":true,
-            "style":"simple",
-            "schema":{
-              "type":"string"
-            }
-          }
-        ],
-        "deprecated":false,
-        "servers":[
-          {
-            "url":"https://api.vtex.com/{account}/pricing",
-            "variables":{
-              "account":{
-                "default":"DefaultParameterValue"
-              }
-            }
-          }
-        ]
+        "deprecated":false
       },
-      "put":{
+      "post":{
+        "operationId":"SettleGiftCardTransaction",
         "parameters":[
           {
             "name":"accountName",
@@ -823,6 +643,16 @@
             }
           },
           {
+            "name":"Accept",
+            "in":"header",
+            "required":true,
+            "style":"simple",
+            "schema":{
+              "type":"string",
+              "default":"application/json"
+            }
+          },
+          {
             "name":"Content-Type",
             "in":"header",
             "required":true,
@@ -833,26 +663,27 @@
             }
           },
           {
-            "name":"Accept",
-            "in":"header",
-            "required":true,
-            "style":"simple",
-            "schema":{
-              "type":"string",
-              "example":"application/vnd.vtex.pricing.v3+json"
-            }
-          },
-          {
-            "name":"priceTableId",
+            "name":"giftCardID",
             "in":"path",
             "required":true,
             "style":"simple",
             "schema":{
-              "type":"string"
+              "type":"string",
+              "default":"6"
+            }
+          },
+          {
+            "name":"transactionID",
+            "in":"path",
+            "required":true,
+            "style":"simple",
+            "schema":{
+              "type":"string",
+              "default":"b47690"
             }
           }
         ],
-        "operationId":"UpdateRulesForAPriceTable"
+        "deprecated":false
       }
     }
   },
