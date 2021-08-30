@@ -1,11 +1,11 @@
 # Still in development!
 
-### Create an Catalog client
+### Install SDK
+```shell
+composer require juanfeltrin/vtex-sdk-php
+```
 
-#### Argument Options
-* pathParams
-* queryParams
-* body
+### Create a Catalog Client
 
 ```php
 <?php
@@ -21,6 +21,12 @@ $catalogClient = new \Vtex\Catalog\CatalogClient([
 ]);
 
 try {
+    /**
+     * Argument Options:
+     * pathParams
+     * queryParams
+     * body
+    */
     $catalogClient->getAttachment([
         'pathParams' => [
             'attachmentid' => 1
