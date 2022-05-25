@@ -157,7 +157,12 @@ class VtexClient
                 ]
             );
 
-            return json_decode($this->response->getBody()->getContents(), true);
+            $responseArr = json_decode($this->response->getBody()->getContents(), true);
+            if (null === $responseArr) {
+                $responseArr = [];
+            }
+            
+            return $responseArr;
         } catch (ClientException $clientException) {
             throw new VtexException(
                 $clientException->getResponse()->getBody()->getContents()
