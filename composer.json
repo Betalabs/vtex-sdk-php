@@ -1,5 +1,5 @@
 {
-    "name": "juanfeltrin/vtex-sdk-php",
+    "name": "betalabs/vtex-sdk-php",
     "description": "VTEX SDK for PHP",
     "keywords": ["vtex","sdk"],
     "type": "library",
@@ -13,6 +13,6 @@
     },
     "require": {
         "guzzlehttp/guzzle": "^7.0",
-      "ext-json": "*"
+        "ext-json": "*"
     }
 }
