@@ -58,7 +58,7 @@ class VtexClient
      * @return array
      * @throws VtexException
      */
-    public function __call(string $name, array $args = []): array
+    public function __call(string $name, array $args): ?array
     {
         try {
             $apiPaths = $this->api['paths'];
