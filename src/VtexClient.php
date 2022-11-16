@@ -188,4 +188,24 @@ class VtexClient
 
         return strtolower($service);
     }
+
+    /**
+     * @return array
+     */
+    public function getApi(): array
+    {
+        return $this->api;
+    }
+
+    /**
+     * @param array $api
+     *
+     * @return VtexClient
+     */
+    public function setApi(array $api): VtexClient
+    {
+        $this->api = $api;
+
+        return $this;
+    }
 }
