@@ -165,7 +165,8 @@ class VtexClient
             return $responseArr;
         } catch (ClientException $clientException) {
             throw new VtexException(
-                $clientException->getResponse()->getBody()->getContents()
+                $clientException->getResponse()->getBody()->getContents(),
+                $clientException->getResponse()->getStatusCode()
             );
         } catch (GuzzleException $guzzleException) {
             throw new VtexException(
