@@ -31,8 +31,25 @@ class VtexClient
      */
     public function __construct(array $config = [])
     {
-        $this->api = api($this->parseClass());
+        $this->parseApi();
+        $this->parseCredentials($config);
+    }
 
+    /**
+     * Parse API routes.
+     */
+    protected function parseApi()
+    {
+        $this->api = api($this->parseClass());
+    }
+
+    /**
+     * Parse credentials from config.
+     *
+     * @param array $config
+     */
+    protected function parseCredentials(array $config = [])
+    {
         if (isset($config['credentials'])) {
             $this->credentials = $config['credentials'];
         } else {
@@ -43,14 +60,6 @@ class VtexClient
                 'appToken' => getenv('VTEX_APP_TOKEN')
             ];
         }
-    }
-
-    /**
-     * @return ResponseInterface
-     */
-    public function getResponse(): ResponseInterface
-    {
-        return $this->response;
     }
 
     /**
@@ -204,6 +213,14 @@ class VtexClient
         $service = substr($getClass, strrpos($getClass, '\\') + 1, -6);
 
         return strtolower($service);
+    }
+
+    /**
+     * @return ResponseInterface
+     */
+    public function getResponse(): ResponseInterface
+    {
+        return $this->response;
     }
 
     /**
