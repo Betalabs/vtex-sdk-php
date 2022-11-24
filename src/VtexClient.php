@@ -165,6 +165,13 @@ class VtexClient
                     'json' => $args[0]['body'] ?? []
                 ]
             );
+            Log::info(
+                'VTEX API response from `'.$uri.'`',
+                [
+                    'body' => $this->response->getBody()->getContents(),
+                    'code' => $this->response->getStatusCode()
+                ]
+            );
 
             $responseArr = json_decode($this->response->getBody()->getContents(), true);
             if (null === $responseArr) {
