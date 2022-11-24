@@ -156,34 +156,18 @@ class VtexClient
             }
 
             $client = new Client();
+            $options = ['headers' => $headers, 'query' => $queryParams, 'json' => $args[0]['body'] ?? []];
 
-            Log::info(
-                'Send ['.$methodOperation.'] request to `'.$uri.'`',
-                [
-                    'headers' => $headers,
-                    'query' => $queryParams,
-                    'json' => $args[0]['body'] ?? []
-                ]
-            );
-            $this->response = $client->request(
-                $methodOperation,
-                $uri,
-                [
-                    'headers' => $headers,
-                    'query' => $queryParams,
-                    'json' => $args[0]['body'] ?? []
-                ]
-            );
-            Log::info(
-                'VTEX API response from `'.$uri.'`',
-                [
-                    'body' => $this->response->getBody()->getContents(),
-                    'code' => $this->response->getStatusCode()
-                ]
-            );
+            Log::info('Send ['.$methodOperation.'] request to `'.$uri.'`', $options);
+            $this->response = $client->request($methodOperation, $uri, $options);
+            
+            $body = $this->response->getBody()->getContents();
+            $statusCode = $this->response->getStatusCode();
+            Log::info('VTEX API response from `'.$uri.'`', ['body' => $body, 'code' => $statusCode]);
 
-            $responseArr = json_decode($this->response->getBody()->getContents(), true);
+            $responseArr = json_decode($body, true);
             if (null === $responseArr) {
+                Log::warning('Error to parse json response body: '.json_last_error_msg());
                 $responseArr = [];
             }
             
