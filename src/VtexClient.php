@@ -195,7 +195,7 @@ class VtexClient
      */
     public function getApi(): array
     {
-        return $this->api;
+        return $this->api ?? ['empty'];
     }
 
     /**
@@ -208,5 +208,13 @@ class VtexClient
         $this->api = $api;
 
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCredentials()
+    {
+        return $this->credentials;
     }
 }
