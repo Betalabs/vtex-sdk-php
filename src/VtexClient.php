@@ -5,6 +5,7 @@ namespace Vtex;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Support\Facades\Log;
 use Psr\Http\Message\ResponseInterface;
 use Vtex\Exception\VtexException;
 
@@ -147,6 +148,14 @@ class VtexClient
 
             $client = new Client();
 
+            Log::info(
+                'Send ['.$methodOperation.'] request to `'.$uri.'`',
+                [
+                    'headers' => $headers,
+                    'query' => $queryParams,
+                    'json' => $args[0]['body'] ?? []
+                ]
+            );
             $this->response = $client->request(
                 $methodOperation,
                 $uri,
